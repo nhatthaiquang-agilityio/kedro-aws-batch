@@ -1,0 +1,4 @@
+aws_batch:
+    job_queue: "spaceflights_queue"
+    job_definition: "kedro_run"
+    max_workers: 2

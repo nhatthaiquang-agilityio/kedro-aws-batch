@@ -1,0 +1,8 @@
+
+# Parameters for the example pipeline. Feel free to delete these once you
+# remove the example pipeline from hooks.py and the example nodes in
+# `src/pipelines/`
+# Documentation for this file format can be found in "Parameters"
+# Link: https://kedro.readthedocs.io/en/stable/04_kedro_project_setup/02_configuration.html#parameters
+test_size: 0.2
+random_state: 3

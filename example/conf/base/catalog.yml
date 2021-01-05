@@ -1,0 +1,43 @@
+companies:
+  type: pandas.CSVDataSet
+  filepath: s3://kedro-data/companies.csv
+
+shuttles:
+  type: pandas.ExcelDataSet
+  filepath: s3://kedro-data/shuttles.xlsx
+
+reviews:
+  type: pandas.CSVDataSet
+  filepath: s3://kedro-data/reviews.csv
+
+preprocessed_companies:
+  type: pandas.CSVDataSet
+  filepath: s3://kedro-data/preprocessed_companies.csv
+
+preprocessed_shuttles:
+  type: pandas.CSVDataSet
+  filepath: s3://kedro-data/preprocessed_shuttles.csv
+
+master_table:
+  type: pandas.CSVDataSet
+  filepath: s3://kedro-data/master_table.csv
+
+Xtrain:
+  type: pickle.PickleDataSet
+  filepath: s3://kedro-data/Xtrain.pkl
+
+Ytrain:
+  type: pickle.PickleDataSet
+  filepath: s3://kedro-data/Ytrain.pkl
+
+Xtest:
+  type: pickle.PickleDataSet
+  filepath: s3://kedro-data/Xtest.pkl
+
+Ytest:
+  type: pickle.PickleDataSet
+  filepath: s3://kedro-data/Ytest.pkl
+
+regression_model:
+  type: pickle.PickleDataSet
+  filepath: s3://kedro-data/pickle_model.pkl
