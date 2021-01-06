@@ -58,8 +58,7 @@ def preprocess_companies(companies: pd.DataFrame) -> pd.DataFrame:
     """
     companies["iata_approved"] = companies["iata_approved"].apply(_is_true)
 
-    companies["company_rating"] =\
-        companies["company_rating"].apply(_parse_percentage)
+    companies["company_rating"] = companies["company_rating"].apply(_parse_percentage)
 
     return companies
 
@@ -75,8 +74,9 @@ def preprocess_shuttles(shuttles: pd.DataFrame) -> pd.DataFrame:
     """
     shuttles["d_check_complete"] = shuttles["d_check_complete"].apply(_is_true)
 
-    shuttles["moon_clearance_complete"] =\
-        shuttles["moon_clearance_complete"].apply(_is_true)
+    shuttles["moon_clearance_complete"] = shuttles["moon_clearance_complete"].apply(
+        _is_true
+    )
 
     shuttles["price"] = shuttles["price"].apply(_parse_money)
 
@@ -96,8 +96,7 @@ def create_master_table(
             Master table.
 
     """
-    rated_shuttles = shuttles.merge(
-        reviews, left_on="id", right_on="wsshuttle_id")
+    rated_shuttles = shuttles.merge(reviews, left_on="id", right_on="wsshuttle_id")
 
     with_companies = rated_shuttles.merge(
         companies, left_on="company_id", right_on="id"

@@ -44,14 +44,22 @@ def create_pipeline(**kwargs):
                 split_data,
                 ["master_table", "parameters"],
                 ["Xtrain", "Xtest", "Ytrain", "Ytest"],
-                name='split_data',
-                tags="tag_split"
+                name="split_data",
+                tags="tag_split",
             ),
             node(
-                train_model, ["Xtrain", "Ytrain"], "regression_model",
-                name='train_model', tags="tag_train"),
+                train_model,
+                ["Xtrain", "Ytrain"],
+                "regression_model",
+                name="train_model",
+                tags="tag_train",
+            ),
             node(
-                predict, ["Xtest", "Ytest", "regression_model"], None,
-                name='predict', tags="tag_predict")
+                predict,
+                ["Xtest", "Ytest", "regression_model"],
+                None,
+                name="predict",
+                tags="tag_predict",
+            ),
         ]
     )

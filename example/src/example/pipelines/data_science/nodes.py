@@ -64,8 +64,8 @@ def split_data(master_table: pd.DataFrame, parameters: Dict) -> List:
     ].values
     y = master_table["price"].values
     Xtrain, Xtest, Ytrain, Ytest = train_test_split(
-        X, y, test_size=parameters["test_size"],
-        random_state=parameters["random_state"])
+        X, y, test_size=parameters["test_size"], random_state=parameters["random_state"]
+    )
 
     return [Xtrain, Xtest, Ytrain, Ytest]
 
@@ -81,10 +81,9 @@ def train_model(Xtrain: np.ndarray, Ytrain: np.ndarray) -> LinearRegression:
     return regression_model
 
 
-def predict(
-        Xtest: np.ndarray, Ytest: np.ndarray,
-        regression_model: LinearRegression):
+def predict(Xtest: np.ndarray, Ytest: np.ndarray, regression_model: LinearRegression):
     Ypredict = regression_model.predict(Xtest)
     score = r2_score(Ytest, Ypredict)
     logger = logging.getLogger(__name__)
     logger.info("Model has a coefficient R^2 of %.3f.", score)
+    return None
