@@ -34,7 +34,7 @@ class AWSBatchRunner(ThreadRunner):
 
     def _run(
         self, pipeline: Pipeline, catalog: DataCatalog, run_id: str = None
-    ) -> None:
+    ):
         nodes = pipeline.nodes
         node_dependencies = pipeline.node_dependencies
         todo_nodes = set(node_dependencies.keys())
@@ -47,6 +47,7 @@ class AWSBatchRunner(ThreadRunner):
         self._logger.info("Max workers: %d", max_workers)
 
         with ThreadPoolExecutor(max_workers=max_workers) as pool:
+            # while len(done_nodes) < len(nodes):
             while True:
                 # Process the nodes that have completed, i.e. jobs that reached
                 # FAILED or SUCCEEDED state
@@ -58,7 +59,7 @@ class AWSBatchRunner(ThreadRunner):
                         node = future.result()
                     except Exception:
                         self._suggest_resume_scenario(pipeline, done_nodes)
-                        raise
+                        break
 
                     done_nodes.add(node)
                     self._logger.info(
@@ -67,33 +68,35 @@ class AWSBatchRunner(ThreadRunner):
                     )
 
                 # A node is ready to be run if all
-                # its upstream dependencies have been
-                # submitted to Batch,
+                # its upstream dependencies have been submitted to Batch,
                 # i.e. all node dependencies were assigned a job ID
-
                 ready = {
                     n for n in todo_nodes if node_dependencies[n] <= node_to_job.keys()
                 }
-                todo_nodes -= ready
 
-                # Asynchronously submit Batch jobs
-                for node in ready:
-                    self._logger.info("submit Job: %s", node.name)
+                if ready is not None:
+                    todo_nodes -= ready
 
-                    future = pool.submit(
-                        self._submit_job,
-                        node,
-                        node_to_job,
-                        node_dependencies[node],
-                        run_id,
-                    )
-                    futures.add(future)
+                    # Asynchronously submit Batch jobs
+                    for node in ready:
+                        self._logger.info("submit Job: %s", node.name)
+
+                        future = pool.submit(
+                            self._submit_job,
+                            node,
+                            node_to_job,
+                            node_dependencies[node],
+                            run_id,
+                        )
+                        futures.add(future)
 
                 # If no more nodes left to run,
                 # ensure the entire pipeline was run
                 if not futures:
                     self._logger.info("Todo nodes: %s", todo_nodes)
                     break
+
+        self._logger.info("Running pipelines are done.")
 
     def _submit_job(
         self,
@@ -120,6 +123,7 @@ class AWSBatchRunner(ThreadRunner):
         node_to_job[node] = job_id
 
         # make sure the job finishes
+        self._logger.info("Track batch Job: %s", job_id)
         _track_batch_job(job_id, self._client)
 
         return node
@@ -139,7 +143,8 @@ def _track_batch_job(job_id: str, client: Any) -> None:
 
         jobs = client.describe_jobs(jobs=[job_id])["jobs"]
         if not jobs:
-            raise ValueError(f"Job ID {job_id} not found.")
+            print("Job Id" + job_id + " not found")
+            break
 
         job = jobs[0]
         status = job["status"]
@@ -149,6 +154,7 @@ def _track_batch_job(job_id: str, client: Any) -> None:
             raise Exception(
                 f"Job {job_id} has failed with the following reason: {reason}"
             )
+            break
 
         if status == "SUCCEEDED":
-            return
+            break
