@@ -35,20 +35,24 @@
 
 + Create AWS Batch compute environment
     ```
-    Create a managed, on-demand one named `spaceflights_env` and let it choose to create new service and instance roles
+    Create a managed, on-demand one named `spaceflights_env` and
+    let it choose to create new service and instance roles
     ```
 
 + Create AWS Batch job queue
     ```
-    Create a queue named `spaceflights_queue`, connected to your newly created compute environment `spaceflights_env`, and give it `Priority` 1.
+    Create a queue named `spaceflights_queue`,
+    connected to your newly created compute environment `spaceflights_env`, and give it `Priority` 1.
     ```
 
 + Create AWS Batch job definition
     ```
-    Create a job definition named `kedro_run`, assign it the newly created `batchJobRole` IAM role, the container image you’ve packaged above, execution timeout of 300s and 2000MB of memory
+    Create a job definition named `kedro_run`, assign it the newly created `batchJobRole` IAM role,
+    the container image you’ve packaged above, execution timeout of 300s and 2000MB of memory
     ```
     ```
-    For me: Should set the execution timeout is 900s. It avoids the main batch to fail due to execution timeout.
+    For me: Should set the execution timeout is 900s.
+    It avoids the main batch to fail due to execution timeout.
     ```
 
 + Run Kedro node(Run Jobs)
@@ -115,7 +119,8 @@
     ```
     botocore.exceptions.ClientError: An error occurred (AccessDeniedException) when
     calling the SubmitJob operation:
-    User: arn:aws:sts::783560535431:assumed-role/batchJobRole/27a6c01f23ec42dfac5d20d539eb48bf is not authorized to perform:
+    User: arn:aws:sts::783560535431:assumed-role/batchJobRole/27a6c01f23ec42dfac5d20d539eb48bf
+    is not authorized to perform:
     batch:SubmitJob on resource: arn:aws:batch:ap-southeast-1:783560535431:job-definition/kedro_run
     ```
 
