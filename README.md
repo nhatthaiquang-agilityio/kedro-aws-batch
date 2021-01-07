@@ -15,10 +15,16 @@
     example$ ./scripts/build.sh
     ```
 
++ ECR Login
+    ```
+    aws ecr get-login-password --region <region> | docker login --username AWS --password-stdin <ecr_id>.dkr.ecr.<region>.amazonaws.com
+    ```
++ Login AWS Console and create an ECR repository
+
 + Push image into ECR
     ```
-    docker tag [image uri]
-    docker push [image uri]
+    docker tag [repository uri]
+    docker push [repository uri]
     ```
 
 + Create IAM role
@@ -40,6 +46,9 @@
 + Create AWS Batch job definition
     ```
     Create a job definition named `kedro_run`, assign it the newly created `batchJobRole` IAM role, the container image you’ve packaged above, execution timeout of 300s and 2000MB of memory
+    ```
+    ```
+    For me: Should set the execution timeout is 900s. It avoids the main batch to fail due to execution timeout.
     ```
 
 + Run Kedro node(Run Jobs)
@@ -118,15 +127,17 @@
 
 
 ### Results
++ Kedro Visualise Pipelines
+    ![Kedro Viz](images/Kedro-Viz.jpg)
+
 + Kedro run Node
     ![NodeRun](images/kedro-run-node.png)
-
 
 + Kedro Example Job
     ![ExampleJob](images/kedro-example-job.jpg)
 
-+ Kedro Job Log
-    ![Job Log](images/kedro-job-log.jpg)
++ Kedro Example Job Log
+    ![ExampleJobLog](images/kedro-example-job-log.jpg)
 
 
 ### References
