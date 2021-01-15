@@ -154,7 +154,6 @@ def _track_batch_job(job_id: str, client: Any) -> None:
             raise Exception(
                 f"Job {job_id} has failed with the following reason: {reason}"
             )
-            break
 
         if status == "SUCCEEDED":
             break
